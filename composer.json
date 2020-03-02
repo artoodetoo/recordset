@@ -1,7 +1,7 @@
 {
-    "name": "artoodetoo/chain",
-    "description": "Chain syntax for array operations",
-    "keywords": ["array", "chain", "sort"],
+    "name": "artoodetoo/recordset",
+    "description": "Work with array as a set of records",
+    "keywords": ["array", "recordset", "chain", "sort", "macro"],
     "license": "MIT",
     "authors": [
         {
@@ -10,10 +10,11 @@
         }
     ],
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "spatie/macroable": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.5"
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {

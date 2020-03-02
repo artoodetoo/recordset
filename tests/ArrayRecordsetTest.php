@@ -138,4 +138,34 @@ class ArrayRecordsetTest extends TestCase
 
         $this->assertEquals(['Lue', 'Alfred', 'Mark', 'Ameli', 'Barb'], $result);
     }
+
+    public function testMacro()
+    {
+        ArrayRecordset::macro(
+            'orderByKeepOnTop',
+            function (string $field, string $onTop, string $direction = 'asc') {
+                $sign = strtolower($direction) === 'asc' ? 1 : -1;
+                $this->comparators[] = function ($a, $b) use ($field, $onTop, $sign) {
+                    $r = ($b[$field] == $onTop) <=> ($a[$field] == $onTop);
+                    return $r ?: strnatcasecmp($a[$field], $b[$field]) * $sign;
+                };
+                return $this;
+            }
+        );
+
+        $result = (new ArrayRecordset($this->nameAge))
+            ->orderByKeepOnTop('name', 'Barb', 'asc')
+            ->get();
+
+        $this->assertEquals(
+            [
+                ['name' => 'Barb',   'age' => 38],
+                ['name' => 'Alfred', 'age' => 40],
+                ['name' => 'Ameli',  'age' => 38],
+                ['name' => 'Lue',    'age' => 45],
+                ['name' => 'Mark',   'age' => 40],
+            ],
+            $result
+        );
+    }
 }

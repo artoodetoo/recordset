@@ -2,10 +2,12 @@
 
 namespace R2\Helpers;
 
-use this;
+use Spatie\Macroable\Macroable;
 
 class ArrayRecordset
 {
+    use Macroable;
+
     const CASE_SENSITIVE = 1;
     const PRESERVE_KEYS = 2;
 
