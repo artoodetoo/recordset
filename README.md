@@ -1,6 +1,9 @@
-# artoodetoo/recordset
+# Work with array as a set of records.
 
-Work with array as a set of records.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/artoodetoo/recordset.svg?style=flat-square)](https://packagist.org/packages/artoodetoo/recordset)
+[![Build Status](https://img.shields.io/travis/artoodetoo/recordset/master.svg?style=flat-square)](https://travis-ci.org/artoodetoo/recordset)
+[![Quality Score](https://img.shields.io/scrutinizer/g/artoodetoo/recordset.svg?style=flat-square)](https://scrutinizer-ci.com/g/artoodetoo/recordset)
+[![Total Downloads](https://img.shields.io/packagist/dt/artoodetoo/recordset.svg?style=flat-square)](https://packagist.org/packages/artoodetoo/recordset)
 
 ## Basic Examples
 
@@ -52,7 +55,7 @@ flags in class constructor. See unit tests for detailed examples.
 
 ## Advanced example
 
-You can extend this class by your own macro. Thanks a lot to amazing [spatie trait](https://github.com/spatie/macroable).
+You can extend this class by your own macro. Thanks a lot to amazing [spatie trait](https://github.com/artoodetoo/recordset).
 
 ```php
 ArrayRecordset::macro(
