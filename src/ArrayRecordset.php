@@ -6,10 +6,13 @@ use Spatie\Macroable\Macroable;
 
 class ArrayRecordset
 {
-    use Macroable;
-
     const CASE_SENSITIVE = 1;
     const PRESERVE_KEYS = 2;
+
+    /** @var string */
+    protected $name = 'Recordset';
+
+    use Macroable;
 
     /** @var array */
     protected $data;
