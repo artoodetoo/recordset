@@ -70,22 +70,55 @@ class ArrayRecordset
     }
 
     /**
+     * Sort by arbitrary function applicable for PHP usort().
+     *
+     * @param callable $func
+     * @return self
+     */
+    public function orderByCallable(callable $func): self
+    {
+        $this->comparators[] = $func;
+        return $this;
+    }
+
+    /**
+     * Group by field.
+     * It cause additional dimension of array. Should be called right before the get() or first() call.
+     *
+     * @param string $field
+     * @return self
+     */
+    public function groupBy(string $field): self
+    {
+        $grouped = [];
+        foreach ($this->get() as $item) {
+            $key = $item[$field];
+            $grouped[$key][] = $item;
+        }
+        $this->data = $grouped;
+        $this->comparators = [];
+        return $this;
+    }
+
+    /**
      * Get result array.
      *
      * @return array
      */
     public function get(): array
     {
-        $sort = $this->options & self::PRESERVE_KEYS ? 'uasort' : 'usort';
-        $sort($this->data, function ($a, $b) {
-            foreach ($this->comparators as $f) {
-                $result = $f($a, $b);
-                if ($result !== 0) {
-                    return $result;
+        if ($this->comparators) {
+            $sort = $this->options & self::PRESERVE_KEYS ? 'uasort' : 'usort';
+            $sort($this->data, function ($a, $b) {
+                foreach ($this->comparators as $f) {
+                    $result = $f($a, $b);
+                    if ($result !== 0) {
+                        return $result;
+                    }
                 }
-            }
-            return 0;
-        });
+                return 0;
+            });
+        }
         return $this->data;
     }
 

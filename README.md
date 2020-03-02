@@ -5,6 +5,12 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/artoodetoo/recordset.svg?style=flat-square)](https://scrutinizer-ci.com/g/artoodetoo/recordset)
 [![Total Downloads](https://img.shields.io/packagist/dt/artoodetoo/recordset.svg?style=flat-square)](https://packagist.org/packages/artoodetoo/recordset)
 
+## Installation
+
+```bash
+composer require artoodetoo/recordset
+```
+
 ## Basic Examples
 
 Sort records like SQL does: 
@@ -53,8 +59,54 @@ Of course you can combine orderBy and pluck. Also you can specify
 `CASE_SENSITIVE` and/or `PRESERVE_KEYS`  
 flags in class constructor. See unit tests for detailed examples.
 
-## Advanced example
+To group records by some field, call groupBy() method.  
+`NOTE`: groupBy should be followed by get() or first() or value() call. 
+You cannot sort or group already grouped recordset.
 
+```php
+$result = (new ArrayRecordset($this->nameAge))
+    ->groupBy('age')
+    ->get();
+
+// will be equal to
+// [
+//     38 => [
+//         ['name' => 'Ameli',  'age' => 38],
+//         ['name' => 'Barb',   'age' => 38],
+//     ],
+//     40 => [
+//         ['name' => 'Alfred', 'age' => 40],
+//         ['name' => 'Mark',   'age' => 40],
+//     ],
+//     45 => [
+//         ['name' => 'Lue',    'age' => 45],
+//     ],
+// ]
+``` 
+
+## Advanced examples
+
+You can use arbitrary comparison function and mix it with others.  
+```php
+$comparator = function ($a, $b) {
+    return strlen($a['name']) - strlen($b['name']);
+};
+$result = (new ArrayRecordset($record))
+    ->orderBy('age')
+    ->orderByCallable($comparator)
+    ->get();
+
+// will be equal to
+// [
+//     ['name' => 'Barb',   'age' => 38],
+//     ['name' => 'Ameli',  'age' => 38],
+// 
+//     ['name' => 'Mark',   'age' => 40],
+//     ['name' => 'Alfred', 'age' => 40],
+//     
+//     ['name' => 'Lue',    'age' => 45],
+// ]
+``` 
 You can extend this class by your own macro. Thanks a lot to amazing [spatie trait](https://github.com/artoodetoo/recordset).
 
 ```php

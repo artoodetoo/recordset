@@ -139,6 +139,54 @@ class ArrayRecordsetTest extends TestCase
         $this->assertEquals(['Lue', 'Alfred', 'Mark', 'Ameli', 'Barb'], $result);
     }
 
+    public function testGroupBy()
+    {
+        $result = (new ArrayRecordset($this->nameAge))
+            ->groupBy('age')
+            ->get();
+
+        $this->assertEquals(
+            [
+                38 => [
+                    ['name' => 'Ameli',  'age' => 38],
+                    ['name' => 'Barb',   'age' => 38],
+                ],
+                40 => [
+                    ['name' => 'Alfred', 'age' => 40],
+                    ['name' => 'Mark',   'age' => 40],
+                ],
+                45 => [
+                    ['name' => 'Lue',    'age' => 45],
+                ],
+            ],
+            $result
+        );
+    }
+
+    public function testOrderByCallable()
+    {
+        $comparator = function ($a, $b) {
+            return strlen($a['name']) - strlen($b['name']);
+        };
+        $result = (new ArrayRecordset($this->nameAge))
+            ->orderBy('age')
+            ->orderByCallable($comparator)
+            ->get();
+
+        $this->assertEquals(
+            [
+                ['name' => 'Barb',   'age' => 38], // len:4
+                ['name' => 'Ameli',  'age' => 38], // len:5
+
+                ['name' => 'Mark',   'age' => 40], // len:4
+                ['name' => 'Alfred', 'age' => 40], // len:6
+
+                ['name' => 'Lue',    'age' => 45], // len:3
+            ],
+            $result
+        );
+    }
+
     public function testMacro()
     {
         ArrayRecordset::macro(
